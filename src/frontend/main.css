@@ -1,0 +1,112 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    /* 防止全局滚动 */
+    background-color: gainsboro;
+}
+
+.main {
+    display: flex !important;
+    border: rgba(0, 0, 0, 1) solid 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.serverList {
+    width: calc(98% - 10px);
+    margin-block: 10px;
+    max-height: calc(90% - 10px - 20px);
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: rgb(162 168 255);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.server-item {
+    border: 1px solid rgba(0, 0, 0, 1);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    min-height: 100px;
+    max-height: 250px;
+    background-color: white;
+}
+
+.server-item-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-inline: 10px;
+    max-width: 100px;
+}
+
+.server-item-icon img {
+    height: 64px;
+}
+
+.server-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.server-item-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-end;
+    width: 50px;
+}
+
+.btn2 {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: rgba(0, 0, 0, 1) solid 1px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+    margin-right: 5px;
+    width: 40px;
+    height: 40px;
+    display: none;
+}
+
+.btn2:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.ui {
+    width: 98%;
+    max-height: calc(10% + 10px);
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+    margin-block: 5px;
+}
+
+.btn {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: rgba(0, 0, 0, 1) solid 1px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+    width: 100%;
+    max-width: 250px;
+    text-box: auto;
+}
+
+.btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}

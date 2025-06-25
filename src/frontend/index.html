@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>mcstatus</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div class="main">
+        <div class="serverList" id="serverList">
+            <div class="server-item">
+                <div class="server-item-icon">
+                    <img src="./assets/img/block.png" alt="Icon"></img>
+                </div>
+                <div class="server-item-info">
+                    <div class="server-item-name">Name: <a id="server-item-name">MineCraft Server</a></div>
+                    <div class="server-item-address">Address: <a id="server-item-address">COM.MC.EXAMPLE</a></div>
+                    <div class="server-item-status">Status: <a id="server-item-status">0 / 20</a></div>
+                    <div class="server-item-players" style="display: none;">Players: <a id="server-item-players"></a>
+                    </div>
+                </div>
+                <div class="server-item-actions" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
+                    <button class="btn2 btn-hid">▲</button>
+                    <button class="btn2 btn-hid">▼</button>
+                </div>
+            </div>
+        </div>
+        <div class="ui">
+            <button class="btn" onclick="addServer()">添加</button>
+            <button class="btn" onclick="editServer()">编辑</button>
+            <button class="btn" onclick="refreshServer()">刷新</button>
+            <button class="btn" onclick="removeServer()">删除</button>
+        </div>
+    </div>
+    </div>
+    <script src="main.js"></script>
+    <script>
+        function showBtns(el) {
+            el.querySelectorAll(".btn2").forEach(btn => {
+                btn.style.display = "block";
+            });
+        }
+        function hideBtns(el) {
+            el.querySelectorAll(".btn2").forEach(btn => {
+                btn.style.display = "none";
+            });
+        }
+    </script>
+</body>
+
+</html>
