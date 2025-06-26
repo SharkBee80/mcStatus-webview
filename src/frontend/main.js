@@ -1,5 +1,6 @@
 onload = () => {
     update(server);
+    setTimeout(() => pywebview.api.onload_init(), 200);
 };
 // show/hide buttons
 function showBtns(el) {
@@ -16,16 +17,13 @@ function hideBtns(el) {
 //server list
 const serverList = document.querySelector(".serverList");
 const icon = './assets/img/block.png';
-const itemid = () => { return Date.now(); }
+const itemid = () => {
+    const min = 1000000000;
+    const max = 9999999999;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 let selected = null;
 const server = [
-    {
-        icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gQEBwQ",
-        name: "MineCraft Server",
-        address: "127.0.0.1:25565",
-        status: "offline",
-        id: 0
-    },
     {
         icon: "",
         name: "MineCraft Server",
@@ -33,20 +31,13 @@ const server = [
         status: "0/20",
         id: 1
     },
-    {
-        icon: "",
-        name: "MineCraft Server",
-        address: "127.0.0.1:25565",
-        status: "0/20",
-        id: ''
-    },
 ]
 function update(servers) {
     serverList.innerHTML = ""; // 清空现有内容
     servers.forEach(item => {
         const div = document.createElement("div");
         div.className = "server-item";
-        const id = item.id !== '' ? item.id : 'withoutid_' + itemid();
+        const id = item.id !== ('' || undefined) ? item.id : 'withoutid_' + itemid();
         div.id = 'listitem_' + id;
         div.innerHTML = `
             <div class="server-item-icon">
@@ -68,20 +59,25 @@ function update(servers) {
                 item.classList.remove("selected");
             });
             div.classList.add("selected");
-            selected = div.id;
+            selected = [div.id, id];
         });
     });
 }
 //ui
 const form_clickHandler = e => {
     if (!e.target.closest(".form-content") && !e.target.closest(".btn")) {
-        form_display();
+        form_undisplay();
     }
 };
-const form_display = () => {
+const form_undisplay = (args) => {
     const form = document.querySelector(".form");
     form.style.display = "none";
     document.removeEventListener("click", form_clickHandler);
+
+    if (args === 0) {
+        document.querySelector("#server-name").value = "";
+        document.querySelector("#server-address").value = "";
+    }
 };
 
 async function addServer() {
@@ -100,13 +96,13 @@ function confirm() {
             address,
         };
         console.log(server);
-        //window.api.send("addServer", server);
-        form_display();
+        pywebview.api.addServer(server);
+        form_undisplay(0);
     }
     else if (!name) {
         //alert("请填写服务器名称");
         console.log("请填写服务器名称");
-        form_display();
+        form_undisplay();
     }
     else {
         //alert("请填写服务器地址");
@@ -115,9 +111,7 @@ function confirm() {
 }
 
 function cancel() {
-    document.querySelector("#server-name").value = "";
-    document.querySelector("#server-address").value = "";
-    form_display();
+    form_undisplay(0);
 }
 
 function editServer() {
@@ -137,7 +131,7 @@ function editServer() {
 
 function refreshServer() {
     selected = null;
-    update(server);
+    pywebview.api.refreshServer();
 }
 
 function removeServer() {
@@ -149,6 +143,7 @@ function removeServer() {
             selected = null;
             update(server);
         }*/
-        serverList.querySelector(`#${selected}`)?.remove();
+        serverList.querySelector(`#${selected[0]}`)?.remove();
+        pywebview.api.removeServer(selected[1]);
     }
 }
