@@ -49,12 +49,15 @@ function update(servers) {
                 <div class="server-item-status">Status: <a id="server-item-status">${item.status}</a></div>
             </div>
             <div class="server-item-actions" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
-                <button class="btn2 btn-hid" onclick="moveUp(${id})">▲</button>
-                <button class="btn2 btn-hid" onclick="moveDown(${id})">▼</button>
+                <button class="btn2" onclick="moveUp(${id})">▲</button>
+                <button class="btn2" onclick="moveDown(${id})">▼</button>
             </div>
         `;
         serverList.appendChild(div);
-        div.addEventListener("click", () => {
+        div.addEventListener("click", (e) => {
+            if (e.target.closest('.server-item-actions')) {
+                return;
+            }
             serverList.querySelectorAll(".server-item").forEach(item => {
                 item.classList.remove("selected");
             });
@@ -63,6 +66,29 @@ function update(servers) {
         });
     });
 }
+
+function moveUp(id) {
+    pywebview.api.moveUp(id);
+    const item = document.querySelector(`#listitem_${id}`);
+    if (!item) return;
+
+    const prev = item.previousElementSibling;
+    if (prev) {
+        item.parentNode.insertBefore(item, prev);
+    }
+}
+
+function moveDown(id) {
+    pywebview.api.moveDown(id);
+    const item = document.querySelector(`#listitem_${id}`);
+    if (!item) return;
+
+    const next = item.nextElementSibling;
+    if (next) {
+        item.parentNode.insertBefore(next, item);
+    }
+}
+
 //ui
 const form_clickHandler = e => {
     if (!e.target.closest(".form-content") && !e.target.closest(".btn")) {
@@ -148,24 +174,3 @@ function removeServer() {
     }
 }
 
-function moveUp(id) {
-    pywebview.api.moveUp(id);
-    const item = document.querySelector(`#listitem_${id}`);
-    if (!item) return;
-
-    const prev = item.previousElementSibling;
-    if (prev) {
-        item.parentNode.insertBefore(item, prev);
-    }
-}
-
-function moveDown(id) {
-    pywebview.api.moveDown(id);
-    const item = document.querySelector(`#listitem_${id}`);
-    if (!item) return;
-
-    const next = item.nextElementSibling;
-    if (next) {
-        item.parentNode.insertBefore(next, item);
-    }
-}
