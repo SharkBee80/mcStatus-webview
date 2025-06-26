@@ -9,7 +9,8 @@ storage = storage.Storage()
 class API:
     def __init__(self, window):
         self.window: webview.Window = window
-        self.window.expose(self.onload_init, self.addServer, self.refreshServer, self.removeServer)
+        self.window.expose(self.onload_init, self.addServer, self.refreshServer, self.removeServer, self.moveUp,
+                           self.moveDown)
 
     def onload_init(self):
         # print('data:' + storage.data.__str__())
@@ -44,3 +45,9 @@ class API:
         if storage.removeServer(id):
             # self.refreshServer()
             pass
+
+    def moveUp(self, id):
+        storage.moveUp(id)
+
+    def moveDown(self, id):
+        storage.moveDown(id)

@@ -49,8 +49,8 @@ function update(servers) {
                 <div class="server-item-status">Status: <a id="server-item-status">${item.status}</a></div>
             </div>
             <div class="server-item-actions" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
-                <button class="btn2 btn-hid">▲</button>
-                <button class="btn2 btn-hid">▼</button>
+                <button class="btn2 btn-hid" onclick="moveUp(${id})">▲</button>
+                <button class="btn2 btn-hid" onclick="moveDown(${id})">▼</button>
             </div>
         `;
         serverList.appendChild(div);
@@ -145,5 +145,27 @@ function removeServer() {
         }*/
         serverList.querySelector(`#${selected[0]}`)?.remove();
         pywebview.api.removeServer(selected[1]);
+    }
+}
+
+function moveUp(id) {
+    pywebview.api.moveUp(id);
+    const item = document.querySelector(`#listitem_${id}`);
+    if (!item) return;
+
+    const prev = item.previousElementSibling;
+    if (prev) {
+        item.parentNode.insertBefore(item, prev);
+    }
+}
+
+function moveDown(id) {
+    pywebview.api.moveDown(id);
+    const item = document.querySelector(`#listitem_${id}`);
+    if (!item) return;
+
+    const next = item.nextElementSibling;
+    if (next) {
+        item.parentNode.insertBefore(next, item);
     }
 }

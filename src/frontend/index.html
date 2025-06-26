@@ -13,7 +13,7 @@
 <body>
     <div class="main">
         <div class="serverList" id="serverList">
-            <div class="server-item">
+            <div class="server-item" id="listitem_init">
                 <div class="server-item-icon">
                     <img src="./assets/img/block.png" alt="Icon"></img>
                 </div>
@@ -25,8 +25,8 @@
                     </div>
                 </div>
                 <div class="server-item-actions" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
-                    <button class="btn2 btn-hid">▲</button>
-                    <button class="btn2 btn-hid">▼</button>
+                    <button class="btn2 btn-hid" onclick="moveUp(this.id)">▲</button>
+                    <button class="btn2 btn-hid" onclick="moveDown(this.id)">▼</button>
                 </div>
             </div>
         </div>
