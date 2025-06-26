@@ -16,6 +16,8 @@ class API:
         # print('data:' + storage.data.__str__())
         self.window.evaluate_js("update(" + storage.data.__str__() + ")")
 
+
+
     def addServer(self, data):
         name, address = data['name'], data['address']
         if ":" not in address:
@@ -51,3 +53,4 @@ class API:
 
     def moveDown(self, id):
         storage.moveDown(id)
+
