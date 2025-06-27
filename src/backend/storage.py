@@ -1,10 +1,10 @@
 import json
-from json import JSONDecodeError
+from src.backend.get_path import get_path
 
 
 class Storage:
     def __init__(self):
-        self.path = 'data.json'
+        self.path = get_path("data.json")
         self.data = []
         self.load()
 
@@ -15,7 +15,7 @@ class Storage:
         except FileNotFoundError:
             self.data = []
             self.save()
-        except JSONDecodeError:
+        except json.JSONDecodeError:
             self.data = []
             self.save()
 
