@@ -16,7 +16,7 @@ function hideBtns(el) {
 
 //server list
 const serverList = document.querySelector(".serverList");
-const icon = './assets/img/block.png';
+const icon = './assets/img/img.png';
 const itemid = () => {
     const min = 1000000000;
     const max = 9999999999;
@@ -33,6 +33,7 @@ const server = [
     },
 ]
 function update(servers) {
+    console.log(servers);
     serverList.innerHTML = ""; // 清空现有内容
     servers.forEach(item => {
         const div = document.createElement("div");
@@ -46,7 +47,7 @@ function update(servers) {
             <div class="server-item-info">
                 <div class="server-item-name">Name: <a id="server-item-name">${item.name}</a></div>
                 <div class="server-item-address">Address: <a id="server-item-address">${item.address}</a></div>
-                <div class="server-item-status">Status: <a id="server-item-status">${item.status}</a></div>
+                <div class="server-item-status">Status: <a id="server-item-status" style="color: ${item.able ? "green" : "red"}">${item.status}</a></div>
             </div>
             <div class="server-item-actions" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
                 <button class="btn2" onclick="moveUp(${id})">▲</button>

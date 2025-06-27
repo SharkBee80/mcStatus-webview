@@ -1,7 +1,9 @@
+import json
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import webview
-from src.backend import storage
+from src.backend import storage, listen
 
 storage = storage.Storage()
 
@@ -13,10 +15,18 @@ class API:
                            self.moveDown)
 
     def onload_init(self):
-        # print('data:' + storage.data.__str__())
-        self.window.evaluate_js("update(" + storage.data.__str__() + ")")
+        self.load_data()
 
+    def load_data(self):
+        def fetch_status(ser):
+            status = listen.Server(ser['fulladdress']).init()
+            return {**ser, **status}
 
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            combined_list = list(executor.map(fetch_status, storage.data))
+
+        # print(combined_list)
+        self.window.evaluate_js(f"update({json.dumps(combined_list)})")
 
     def addServer(self, data):
         name, address = data['name'], data['address']
@@ -41,7 +51,7 @@ class API:
         self.refreshServer()
 
     def refreshServer(self):
-        self.window.evaluate_js("update(" + storage.data.__str__() + ")")
+        self.load_data()
 
     def removeServer(self, id):
         if storage.removeServer(id):
@@ -53,4 +63,3 @@ class API:
 
     def moveDown(self, id):
         storage.moveDown(id)
-
