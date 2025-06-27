@@ -22,10 +22,18 @@ class API:
             status = listen.Server(ser['fulladdress']).init()
             return {**ser, **status}
 
+        start_time = time.time()  # 开始计时
+
         with ThreadPoolExecutor(max_workers=5) as executor:
             combined_list = list(executor.map(fetch_status, storage.data))
 
-        # print(combined_list)
+        end_time = time.time()  # 结束计时
+        elapsed_time = end_time - start_time
+        if elapsed_time < 1:
+            print(f"执行耗时: {elapsed_time * 1000:.0f} ms")
+        else:
+            print(f"执行耗时: {elapsed_time:.2f} s")
+
         self.window.evaluate_js(f"update({json.dumps(combined_list)})")
 
     def addServer(self, data):
