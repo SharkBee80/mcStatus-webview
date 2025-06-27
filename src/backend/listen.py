@@ -34,7 +34,7 @@ class Server:
                             status.players.sample] if status.players.sample else None
             self.icon = status.icon
             self.motd = status.description
-            self.ping = status.latency
+            self.ping = f"{float(status.latency):.2f} ms"
 
         except Exception as e:
             print(e, self.address)
