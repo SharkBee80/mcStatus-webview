@@ -54,6 +54,7 @@ function update(servers) {
         div.className = "server-item";
         const id = item.id !== ('' || undefined) ? item.id : 'withoutid_' + itemid();
         div.id = 'listitem_' + id;
+        const motd = item.motd ? parseMOTD(String(item.motd)) : "A MineCraft Server";
         div.innerHTML = `
             <div class="server-item-icon" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
                 <img src="${item.icon || icon}" alt="Icon"></img>
@@ -63,8 +64,8 @@ function update(servers) {
                 </div>
             </div>
             <div class="server-item-info">
-                <div class="server-item-name"><a id="server-item-name">${item.name}</a></div>
-                <div class="server-item-motd"><a id="server-item-motd">${item.motd ? item.motd : 'A MineCraft Server'}</a></div>
+                <div class="server-item-name" id="server-item-name">${item.name}</a></div>
+                <div class="server-item-motd" id="server-item-motd">${motd}</a></div>
                 <!--<div class="server-item-status">Status: <a id="server-item-status" style="color: ${item.able ? "green" : "red"}">${item.status}</a></div>-->
             </div>
             <div class="server-item-signal">
@@ -203,3 +204,62 @@ function removeServer() {
     }
 }
 
+// other
+function parseMOTD(input) {
+    const colorMap = {
+        '§0': 'mc-black',
+        '§1': 'mc-dark-blue',
+        '§2': 'mc-dark-green',
+        '§3': 'mc-dark-aqua',
+        '§4': 'mc-dark-red',
+        '§5': 'mc-dark-purple',
+        '§6': 'mc-gold',
+        '§7': 'mc-gray',
+        '§8': 'mc-dark-gray',
+        '§9': 'mc-blue',
+        '§a': 'mc-green',
+        '§b': 'mc-aqua',
+        '§c': 'mc-red',
+        '§d': 'mc-light-purple',
+        '§e': 'mc-yellow',
+        '§f': 'mc-white'
+    };
+
+    const formatMap = {
+        '§l': 'mc-bold',
+        '§m': 'mc-strikethrough',
+        '§n': 'mc-underline',
+        '§o': 'mc-italic'
+    };
+
+    let result = '';
+    let currentSpan = '';
+    let currentClasses = [];
+
+    for (let i = 0; i < input.length; i++) {
+        if (input[i] === '§' && i + 1 < input.length) {
+            if (currentSpan) {
+                result += `<span class=${currentClasses.join(' ')}>${currentSpan}</span>`;
+                currentSpan = '';
+            }
+
+            const code = input.substr(i, 2);
+            if (colorMap[code]) {
+                currentClasses = [colorMap[code]];
+            } else if (formatMap[code]) {
+                currentClasses.push(formatMap[code]);
+            } else if (code === '§r') {
+                currentClasses = [];
+            }
+            i++;
+        } else {
+            currentSpan += input[i];
+        }
+    }
+
+    if (currentSpan) {
+        result += `<span class=${currentClasses.join(' ')}>${currentSpan}</span>`;
+    }
+
+    return result || 'No description available';
+}
