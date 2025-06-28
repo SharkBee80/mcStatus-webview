@@ -20,9 +20,14 @@
                 <div class="server-item-info">
                     <div class="server-item-name">Name: <a id="server-item-name">MineCraft Server</a></div>
                     <div class="server-item-address">Address: <a id="server-item-address">COM.MC.EXAMPLE</a></div>
-                    <div class="server-item-status">Status: <a id="server-item-status">0 / 20</a></div>
+                    <div class="server-item-status">Status: <a id="server-item-status" style="color: red">Offline</a>
+                    </div>
                     <div class="server-item-players" style="display: none;">Players: <a id="server-item-players"></a>
                     </div>
+                </div>
+                <div class="server-item-signal">
+                    <a id="server-item-online">0/20</a>
+                    <img src="./assets/img/singal/loading.gif" alt="" id="server-item-loading">
                 </div>
                 <div class="server-item-actions" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
                     <button class="btn2" onclick="moveUp(this.id)">▲</button>

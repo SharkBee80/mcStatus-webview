@@ -30,17 +30,23 @@ body {
 }
 
 .server-item {
-    border: 1px solid rgba(0, 0, 0, 1);
+    /*border: 1px solid rgba(0, 0, 0, 1);*/
     border-radius: 5px;
     margin-bottom: 10px;
     display: flex;
     min-height: 100px;
     max-height: 250px;
-    background-color: white;
+    color: white;
+    background-image: url("./assets/img/light_dirt_background.png");
+    background-repeat: repeat;
+    background-size: contain;
 }
 
 .selected {
     background-color: rgb(255 255 255 / 50%);
+    background-image: url("./assets/img/options_background.png");
+    background-repeat: repeat;
+    background-size: contain;
 }
 
 .server-item-icon {
@@ -60,6 +66,27 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.server-item-signal {
+    display: flex;
+    column-gap: 6px;
+    height: 32px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.server-item-signal a {
+    font-size: large;
+    white-space: nowrap;
+    place-self: end;
+    font-family: monospace;
+    font-weight: bolder;
+}
+
+.server-item-signal img {
+    height: fit-content;
 }
 
 .server-item-actions {

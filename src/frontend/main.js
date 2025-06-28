@@ -1,5 +1,5 @@
 onload = () => {
-    update(server);
+    //update(server);
     setTimeout(() => pywebview.api.onload_init(), 200);
 };
 // show/hide buttons
@@ -49,6 +49,10 @@ function update(servers) {
                 <div class="server-item-address">Address: <a id="server-item-address">${item.address}</a></div>
                 <div class="server-item-status">Status: <a id="server-item-status" style="color: ${item.able ? "green" : "red"}">${item.status}</a></div>
             </div>
+            <div class="server-item-signal">
+                    <a id="server-item-online">${item.able ? `${item.online}/${item.max}` : ""}</a>
+                    <img src="./assets/img/singal/${item.signal}.png" alt="" id="server-item-loading">
+                </div>
             <div class="server-item-actions" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
                 <button class="btn2" onclick="moveUp(${id})">▲</button>
                 <button class="btn2" onclick="moveDown(${id})">▼</button>

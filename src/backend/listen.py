@@ -18,6 +18,7 @@ class Server:
         self.motd = None
         self.icon = None
         self.ping = None
+        self.signal = None
 
     def init(self):
         try:
@@ -36,6 +37,20 @@ class Server:
             self.motd = status.description
             self.ping = f"{float(status.latency):.2f} ms"
 
+            def rate_signal():
+                if status.latency < 50:
+                    return 5
+                elif status.latency < 125:
+                    return 4
+                elif status.latency < 250:
+                    return 3
+                elif status.latency < 400:
+                    return 2
+                else:
+                    return 1
+
+            self.signal = rate_signal()
+
         except Exception as e:
             print(e, self.address)
 
@@ -49,10 +64,11 @@ class Server:
             self.motd = None
             self.icon = None
             self.ping = None
+            self.signal = 0
 
         output = {"able": self.able, "status": self.on_off, "version": self.version, "server": self.server,
-                  "online": self.online,
-                  "max": self.max, "players": self.players, "icon": self.icon, "motd": self.motd, "ping": self.ping,
+                  "online": self.online, "max": self.max, "players": self.players, "icon": self.icon,
+                  "motd": self.motd, "ping": self.ping, "signal": self.signal,
                   "updatetime": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}
         return output
 
