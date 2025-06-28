@@ -28,6 +28,17 @@ class Storage:
         self.save()
         return True
 
+    def editServer(self, data):
+        for i in range(len(self.data)):
+            if self.data[i]['id'] == data['id']:
+                self.data[i]['name'] = data['name']
+                self.data[i]['address'] = data['address']
+                self.data[i]['fulladdress'] = data['fulladdress']
+                self.data[i]['edittime'] = data['edittime']
+                self.save()
+                return True
+        return False
+
     def removeServer(self, id):
         for i in range(len(self.data)):
             if self.data[i]['id'] == id:

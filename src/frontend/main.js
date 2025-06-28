@@ -80,7 +80,7 @@ function update(servers) {
                 item.classList.remove("selected");
             });
             div.classList.add("selected");
-            selected = [div.id, id];
+            selected = [div.id, id, item.name, item.address];
         });
     });
 }
@@ -122,6 +122,7 @@ const form_undisplay = (args) => {
         document.querySelector("#server-name").value = "";
         document.querySelector("#server-address").value = "";
     }
+    editid = null;
 };
 
 async function addServer() {
@@ -131,6 +132,7 @@ async function addServer() {
     document.addEventListener("click", form_clickHandler);
 }
 
+let editid = null;
 function confirm() {
     const name = document.querySelector("#server-name").value;
     const address = document.querySelector("#server-address").value;
@@ -140,7 +142,13 @@ function confirm() {
             address,
         };
         console.log(server);
-        pywebview.api.addServer(server);
+        if (editid) {
+            server.id = editid;
+            pywebview.api.editServer(server);
+        }
+        else {
+            pywebview.api.addServer(server);
+        }
         form_undisplay(0);
     }
     else if (!name) {
@@ -159,17 +167,16 @@ function cancel() {
 }
 
 function editServer() {
-    return;
+    //return;
     if (selected) {
-        const server = serverList.querySelector(`#${selected}`);
-        const name = server.querySelector("#server-item-name").textContent;
-        const address = server.querySelector("#server-item-address").textContent;
-        document.querySelector("#server-name").value = name;
-        document.querySelector("#server-address").value = address;
+        document.querySelector("#server-name").value = selected[2];
+        document.querySelector("#server-address").value = selected[3];
         const form = document.querySelector(".form");
         form.style.display = "";
         //await new Promise(resolve => setTimeout(resolve, 100));
         document.addEventListener("click", form_clickHandler);
+
+        editid = selected[1];
     }
 }
 
