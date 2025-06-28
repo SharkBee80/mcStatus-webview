@@ -73,6 +73,10 @@ body {
     max-width: 100px;
 }
 
+.server-item-icon:hover .btn2 {
+    display: block;
+}
+
 .btn2 {
     background-color: rgba(0, 0, 0, 0);
     /*border: rgba(0, 0, 0, 1) solid 1px;

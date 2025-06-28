@@ -2,6 +2,8 @@ onload = () => {
     update(server);
     setTimeout(() => pywebview.api.onload_init(), 200);
 };
+
+/*
 // show/hide buttons
 function showBtns(el) {
     el.querySelectorAll(".btn2").forEach(btn => {
@@ -13,6 +15,7 @@ function hideBtns(el) {
         btn.style.display = "none";
     });
 }
+*/
 
 //server list
 const serverList = document.querySelector(".serverList");
@@ -59,7 +62,7 @@ function update(servers) {
             if (item.players) {
                 a = ''
                 item.players.forEach(player => {
-                    a += `<p class="player">${player.name}</p>`;
+                    a += `<p>${parseMOTD(player.name)}</p>`
                 });
                 return a;
             } else {
@@ -67,7 +70,7 @@ function update(servers) {
             }
         };
         div.innerHTML = `
-            <div class="server-item-icon" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
+            <div class="server-item-icon">
                 <img src="${item.icon || icon}" alt="Icon"></img>
                 <div class="server-item-actions">
                     <button class="btn2 up" onclick="moveUp(${id})">▲</button>
@@ -83,7 +86,7 @@ function update(servers) {
                 <a id="server-item-online">${item.able ? `${item.online}/${item.max}` : ""}</a>
                 <img src="./assets/img/singal/${item.signal}.png" alt="" id="server-item-loading">
                 <div class="tooltip">
-                    ${item.players !== null && item.players !== undefined ? `<div class="tooltiptext">${players()}</div>` : ''}
+                    <div class="tooltiptext">${players()}</div>
                 </div>
             </div>
         `;
