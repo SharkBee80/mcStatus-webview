@@ -48,6 +48,7 @@ const server = [
 function update(servers) {
     console.log(servers);
     serverList.innerHTML = ""; // 清空现有内容
+    selected = null;
     servers.forEach(item => {
         const div = document.createElement("div");
         div.className = "server-item";
@@ -63,7 +64,7 @@ function update(servers) {
             </div>
             <div class="server-item-info">
                 <div class="server-item-name"><a id="server-item-name">${item.name}</a></div>
-                <div class="server-item-motd"><a id="server-item-motd">${item.motd}</a></div>
+                <div class="server-item-motd"><a id="server-item-motd">${item.motd ? item.motd : 'A MineCraft Server'}</a></div>
                 <!--<div class="server-item-status">Status: <a id="server-item-status" style="color: ${item.able ? "green" : "red"}">${item.status}</a></div>-->
             </div>
             <div class="server-item-signal">
@@ -153,12 +154,12 @@ function confirm() {
     }
     else if (!name) {
         //alert("请填写服务器名称");
-        console.log("请填写服务器名称");
+        noty("请填写服务器名称");
         form_undisplay();
     }
     else {
         //alert("请填写服务器地址");
-        console.log("请填写服务器地址");
+        noty("请填写服务器地址");
     }
 }
 
@@ -183,6 +184,7 @@ function editServer() {
 function refreshServer() {
     selected = null;
     pywebview.api.refreshServer();
+    noty("正在刷新服务器列表")
 }
 
 function removeServer() {
@@ -196,6 +198,8 @@ function removeServer() {
         }*/
         serverList.querySelector(`#${selected[0]}`)?.remove();
         pywebview.api.removeServer(selected[1]);
+        selected = null;
+        noty(`已删除服务器:${selected[2]}`);
     }
 }
 
