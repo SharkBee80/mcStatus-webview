@@ -1,5 +1,5 @@
 onload = () => {
-    //update(server);
+    update(server);
     setTimeout(() => pywebview.api.onload_init(), 200);
 };
 // show/hide buttons
@@ -25,11 +25,24 @@ const itemid = () => {
 let selected = null;
 const server = [
     {
-        icon: "",
+        able: false,
+        address: "0.0.0.0",
+        addtime: "2025-06-28 16:28:15",
+        edittime: "2025-06-28 16:28:15",
+        fulladdress: "0.0.0.0:25565",
+        icon: null,
+        id: 1751099295,
+        max: null,
+        motd: "A MineCraft Server",
         name: "MineCraft Server",
-        address: "127.0.0.1:25565",
-        status: "0/20",
-        id: 1
+        online: null,
+        ping: null,
+        players: null,
+        server: null,
+        signal: 0,
+        status: "Offline",
+        updatetime: "2025-06-28 17:58:19",
+        version: null,
     },
 ]
 function update(servers) {
@@ -41,21 +54,21 @@ function update(servers) {
         const id = item.id !== ('' || undefined) ? item.id : 'withoutid_' + itemid();
         div.id = 'listitem_' + id;
         div.innerHTML = `
-            <div class="server-item-icon">
+            <div class="server-item-icon" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
                 <img src="${item.icon || icon}" alt="Icon"></img>
+                <div class="server-item-actions">
+                    <button class="btn2 up" onclick="moveUp(${id})">▲</button>
+                    <button class="btn2 down" onclick="moveDown(${id})">▼</button>
+                </div>
             </div>
             <div class="server-item-info">
-                <div class="server-item-name">Name: <a id="server-item-name">${item.name}</a></div>
-                <div class="server-item-address">Address: <a id="server-item-address">${item.address}</a></div>
-                <div class="server-item-status">Status: <a id="server-item-status" style="color: ${item.able ? "green" : "red"}">${item.status}</a></div>
+                <div class="server-item-name"><a id="server-item-name">${item.name}</a></div>
+                <div class="server-item-motd"><a id="server-item-motd">${item.motd}</a></div>
+                <!--<div class="server-item-status">Status: <a id="server-item-status" style="color: ${item.able ? "green" : "red"}">${item.status}</a></div>-->
             </div>
             <div class="server-item-signal">
                     <a id="server-item-online">${item.able ? `${item.online}/${item.max}` : ""}</a>
                     <img src="./assets/img/singal/${item.signal}.png" alt="" id="server-item-loading">
-                </div>
-            <div class="server-item-actions" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
-                <button class="btn2" onclick="moveUp(${id})">▲</button>
-                <button class="btn2" onclick="moveDown(${id})">▼</button>
             </div>
         `;
         serverList.appendChild(div);
