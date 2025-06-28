@@ -64,7 +64,7 @@ function update(servers) {
                 item.players.forEach(player => {
                     a += `<p>${parseMOTD(player.name)}</p>`
                 });
-                return a;
+                return `<div class="tooltiptext">${a}</div>`;
             } else {
                 return "";
             }
@@ -86,7 +86,7 @@ function update(servers) {
                 <a id="server-item-online">${item.able ? `${item.online}/${item.max}` : ""}</a>
                 <img src="./assets/img/singal/${item.signal}.png" alt="" id="server-item-loading">
                 <div class="tooltip">
-                    <div class="tooltiptext">${players()}</div>
+                    ${players()}
                 </div>
             </div>
         `;
