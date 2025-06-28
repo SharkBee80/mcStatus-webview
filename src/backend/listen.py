@@ -1,4 +1,3 @@
-import json
 import time
 
 from mcstatus import JavaServer
@@ -19,10 +18,14 @@ class Server:
         self.motd = None
         self.icon = None
         self.ping = None
+        self.elapsed_time = None
+
         self.signal = None
 
     def init(self):
         try:
+            self.elapsed_time = time.time()
+
             server_ = JavaServer.lookup(self.address)
             status = server_.status()
 
@@ -66,12 +69,15 @@ class Server:
             self.icon = None
             self.ping = None
             self.signal = 0
-
-        output = {"able": self.able, "status": self.on_off, "version": self.version, "server": self.server,
-                  "online": self.online, "max": self.max, "players": self.players, "icon": self.icon,
-                  "motd": self.motd, "ping": self.ping, "signal": self.signal,
-                  "updatetime": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}
-        return output
+        finally:
+            self.elapsed_time = f"{(time.time() - self.elapsed_time):.2f} ms"
+            output = {"able": self.able, "status": self.on_off, "version": self.version, "server": self.server,
+                      "online": self.online, "max": self.max, "players": self.players, "icon": self.icon,
+                      "motd": self.motd, "ping": self.ping, "signal": self.signal,
+                      "updatetime": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                      "elapsed_time": self.elapsed_time
+                      }
+            return output
 
 
 if __name__ == "__main__":

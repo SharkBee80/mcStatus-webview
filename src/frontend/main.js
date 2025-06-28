@@ -1,6 +1,8 @@
-onload = () => {
-    update(server);
-    setTimeout(() => pywebview.api.onload_init(), 200);
+onload = async () => {
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    load_list(servers);
+    pywebview.api.onload_init();
 };
 
 /*
@@ -26,7 +28,7 @@ const itemid = () => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 let selected = null;
-const server = [
+let servers = [
     {
         able: false,
         address: "0.0.0.0",
@@ -48,8 +50,9 @@ const server = [
         version: null,
     },
 ]
-function update(servers) {
-    console.log(servers);
+
+function load_list(data) {
+    servers = data;
     serverList.innerHTML = ""; // 清空现有内容
     selected = null;
     servers.forEach(item => {
@@ -57,21 +60,10 @@ function update(servers) {
         div.className = "server-item";
         const id = item.id !== ('' || undefined) ? item.id : 'withoutid_' + itemid();
         div.id = 'listitem_' + id;
-        const motd = item.motd ? parseMOTD(String(item.motd)) : "A MineCraft Server";
-        const players = () => {
-            if (item.players) {
-                a = ''
-                item.players.forEach(player => {
-                    a += `<p>${parseMOTD(player.name)}</p>`
-                });
-                return `<div class="tooltiptext">${a}</div>`;
-            } else {
-                return "";
-            }
-        };
+
         div.innerHTML = `
             <div class="server-item-icon">
-                <img src="${item.icon || icon}" alt="Icon"></img>
+                <img src="${icon}" alt="Icon"></img>
                 <div class="server-item-actions">
                     <button class="btn2 up" onclick="moveUp(${id})">▲</button>
                     <button class="btn2 down" onclick="moveDown(${id})">▼</button>
@@ -79,15 +71,10 @@ function update(servers) {
             </div>
             <div class="server-item-info">
                 <div class="server-item-name" id="server-item-name">${item.name}</a></div>
-                <div class="server-item-motd" id="server-item-motd">${motd}</a></div>
-                <!--<div class="server-item-status">Status: <a id="server-item-status" style="color: ${item.able ? "green" : "red"}">${item.status}</a></div>-->
+                <div class="server-item-motd" id="server-item-motd">A MineCraft Server</a></div>
             </div>
             <div class="server-item-signal">
-                <a id="server-item-online">${item.able ? `${item.online}/${item.max}` : ""}</a>
-                <img src="./assets/img/singal/${item.signal}.png" alt="" id="server-item-loading">
-                <div class="tooltip">
-                    ${players()}
-                </div>
+                <img src="./assets/img/singal/loading.gif" alt="" id="server-item-loading">
             </div>
         `;
         serverList.appendChild(div);
@@ -106,6 +93,53 @@ function update(servers) {
             }
         });
     });
+    updateAll();
+}
+
+function updateAll() {
+    servers.forEach(item => {
+        pywebview.api.updateServer(item.id);
+    });
+}
+
+function updateServer(item) {
+    console.log(item);
+    const server_item = document.querySelector('#listitem_' + item.id);
+    server_item.innerHTML = ""; // 清空现有内容
+
+    const id = server_item.id;
+    const motd = item.motd ? parseMOTD(String(item.motd)) : "A MineCraft Server";
+    const players = () => {
+        if (item.players) {
+            a = ''
+            item.players.forEach(player => {
+                a += `<p>${parseMOTD(player.name)}</p>`
+            });
+            return `<div class="tooltiptext">${a}</div>`;
+        } else {
+            return "";
+        }
+    };
+    server_item.innerHTML = `
+        <div class="server-item-icon">
+            <img src="${item.icon || icon}" alt="Icon"></img>
+            <div class="server-item-actions">
+                <button class="btn2 up" onclick="moveUp(${id})">▲</button>
+                <button class="btn2 down" onclick="moveDown(${id})">▼</button>
+            </div>
+        </div>
+        <div class="server-item-info">
+            <div class="server-item-name" id="server-item-name">${item.name}</a></div>
+            <div class="server-item-motd" id="server-item-motd">${motd}</a></div>
+        </div>
+        <div class="server-item-signal">
+            <a>${item.able ? `${item.online}/${item.max}` : ""}</a>
+            <img src="./assets/img/singal/${item.signal}.png" alt="">
+            <div class="tooltip">
+                ${players()}
+            </div>
+        </div>
+    `;
 }
 
 function moveUp(id) {
@@ -220,8 +254,8 @@ function removeServer() {
         }*/
         serverList.querySelector(`#${selected[0]}`)?.remove();
         pywebview.api.removeServer(selected[1]);
-        selected = null;
         noty(`已删除服务器:${selected[2]}`);
+        selected = null;
     }
 }
 

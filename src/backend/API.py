@@ -3,6 +3,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 import webview
+from sympy.matrices.expressions.matadd import combine
+
 from src.backend import storage, listen
 
 storage = storage.Storage()
@@ -11,30 +13,21 @@ storage = storage.Storage()
 class API:
     def __init__(self, window):
         self.window: webview.Window = window
-        self.window.expose(self.onload_init, self.addServer, self.editServer, self.refreshServer, self.removeServer, self.moveUp,
-                           self.moveDown)
+        self.window.expose(self.onload_init, self.updateServer, self.addServer, self.editServer,
+                           self.refreshServer, self.removeServer, self.moveUp, self.moveDown)
 
     def onload_init(self):
         self.load_data()
 
     def load_data(self):
-        def fetch_status(ser):
-            status = listen.Server(ser['fulladdress']).init()
-            return {**ser, **status}
+        self.window.evaluate_js(f"load_list({json.dumps(storage.data)})")
 
-        start_time = time.time()  # 开始计时
-
-        with ThreadPoolExecutor(max_workers=5) as executor:
-            combined_list = list(executor.map(fetch_status, storage.data))
-
-        end_time = time.time()  # 结束计时
-        elapsed_time = end_time - start_time
-        if elapsed_time < 1:
-            print(f"执行耗时: {elapsed_time * 1000:.0f} ms")
-        else:
-            print(f"执行耗时: {elapsed_time:.2f} s")
-
-        self.window.evaluate_js(f"update({json.dumps(combined_list)})")
+    def updateServer(self, id):
+        for i in storage.data:
+            if i['id'] == id:
+                status = listen.Server(i['fulladdress']).init()
+                combined = {**i, **status}
+                self.window.evaluate_js(f"updateServer({json.dumps(combined)})")
 
     def format_address(self, address):
         if ":" not in address:
