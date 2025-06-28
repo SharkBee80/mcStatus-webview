@@ -83,6 +83,10 @@ function update(servers) {
             });
             div.classList.add("selected");
             selected = [div.id, id, item.name, item.address];
+            // 双击
+            if (e.detail === 2) {
+                //noty(item.address)
+            }
         });
     });
 }
