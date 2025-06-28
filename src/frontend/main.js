@@ -55,6 +55,17 @@ function update(servers) {
         const id = item.id !== ('' || undefined) ? item.id : 'withoutid_' + itemid();
         div.id = 'listitem_' + id;
         const motd = item.motd ? parseMOTD(String(item.motd)) : "A MineCraft Server";
+        const players = () => {
+            if (item.players) {
+                a = ''
+                item.players.forEach(player => {
+                    a += `<p class="player">${player.name}</p>`;
+                });
+                return a;
+            } else {
+                return "";
+            }
+        };
         div.innerHTML = `
             <div class="server-item-icon" onmouseover="showBtns(this)" onmouseout="hideBtns(this)">
                 <img src="${item.icon || icon}" alt="Icon"></img>
@@ -69,8 +80,11 @@ function update(servers) {
                 <!--<div class="server-item-status">Status: <a id="server-item-status" style="color: ${item.able ? "green" : "red"}">${item.status}</a></div>-->
             </div>
             <div class="server-item-signal">
-                    <a id="server-item-online">${item.able ? `${item.online}/${item.max}` : ""}</a>
-                    <img src="./assets/img/singal/${item.signal}.png" alt="" id="server-item-loading">
+                <a id="server-item-online">${item.able ? `${item.online}/${item.max}` : ""}</a>
+                <img src="./assets/img/singal/${item.signal}.png" alt="" id="server-item-loading">
+                <div class="tooltip">
+                    ${item.players !== null && item.players !== undefined ? `<div class="tooltiptext">${players()}</div>` : ''}
+                </div>
             </div>
         `;
         serverList.appendChild(div);

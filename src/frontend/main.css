@@ -19,9 +19,9 @@ body {
 }
 
 .serverList {
-    width: calc(98% - 10px);
-    margin-block: 10px;
-    max-height: calc(90% - 10px - 20px);
+    width: calc(99% - 10px);
+    margin-block: 4px 10px;
+    max-height: calc(100% - 10px - 10px - 4px);
     flex-grow: 1;
     overflow-y: auto;
     background-color: rgb(162 168 255);
@@ -46,9 +46,9 @@ body {
 }
 
 .server-item {
-    /*border: 1px solid rgba(0, 0, 0, 1);*/
+    border: 3px solid rgb(0, 0, 139, 0.75);
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     display: flex;
     min-height: 64px;
     max-height: 250px;
@@ -71,6 +71,41 @@ body {
     justify-content: center;
     align-items: center;
     max-width: 100px;
+}
+
+.btn2 {
+    background-color: rgba(0, 0, 0, 0);
+    /*border: rgba(0, 0, 0, 1) solid 1px;
+    border-radius: 5px;*/
+    border: none;
+    color: rgba(255, 255, 255, 0);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+    height: 50%;
+    display: none;
+}
+
+.btn2.up {
+    background-image: url("./assets/img/btn/up.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50%;
+}
+
+.btn2.up:hover {
+    background-image: url("./assets/img/btn/up_hover.png");
+}
+
+.btn2.down {
+    background-image: url("./assets/img/btn/down.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50%;
+}
+
+.btn2.down:hover {
+    background-image: url("./assets/img/btn/down_hover.png");
 }
 
 .server-item-actions {
@@ -134,49 +169,48 @@ body {
     height: fit-content;
 }
 
-.btn2 {
-    background-color: rgba(0, 0, 0, 0);
-    /*border: rgba(0, 0, 0, 1) solid 1px;
-    border-radius: 5px;*/
-    border: none;
-    color: rgba(255, 255, 255, 0);
-    cursor: pointer;
-    font-size: 16px;
-    padding: 10px;
-    height: 50%;
-    display: none;
+.tooltip {
+    position: relative;
+    display: inline-block;
 }
 
-.btn2.up {
-    background-image: url("./assets/img/btn/up.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: 50%;
+.tooltiptext {
+    visibility: hidden;
+    width: max-content;
+    background-color: rgb(128, 128, 128);
+    color: #fff;
+    text-align: start;
+    padding: 5px 8px;
+    border-radius: 6px;
+    white-space: inherit;
+
+    /* 定位 */
+    position: absolute;
+    transform: translate(calc(-100% - 40px - 6px - 0.5vw), -25%);
+    z-index: 998;
 }
 
-.btn2.up:hover {
-    background-image: url("./assets/img/btn/up_hover.png");
+.tooltiptext p {
+    margin: 0;
 }
 
-.btn2.down {
-    background-image: url("./assets/img/btn/down.png");
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: 50%;
+.server-item-signal:hover .tooltip .tooltiptext {
+    visibility: visible;
 }
 
-.btn2.down:hover {
-    background-image: url("./assets/img/btn/down_hover.png");
-}
+
+/* ui */
 
 .ui {
-    width: 98%;
-    max-height: calc(10% + 10px);
+    width: 99%;
+    max-height: calc(100% - 9px);
     display: flex;
     flex-direction: row;
     gap: 10px;
     justify-content: space-between;
-    margin-block: 5px;
+    margin-block: 3px 6px;
+    background-color: beige;
+    z-index: 997;
 }
 
 .btn {

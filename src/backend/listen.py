@@ -1,3 +1,4 @@
+import json
 import time
 
 from mcstatus import JavaServer
