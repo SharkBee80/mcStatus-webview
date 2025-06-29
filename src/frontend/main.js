@@ -2,6 +2,7 @@ onload = async () => {
     await new Promise(resolve => setTimeout(resolve, 200));
     btn_ui();
     load_list(servers);
+    preload();
     pywebview.api.onload_init();
 };
 
@@ -18,6 +19,17 @@ function hideBtns(el) {
     });
 }
 */
+// 预加载
+const preload = () => {
+    const urls = [
+        './assets/img/dark_oak_log.png',
+    ];
+    urls.forEach(src => {
+        const url = new Image();
+        url.src = src;
+    });
+};
+
 
 //server list
 const serverList = document.querySelector(".serverList");
