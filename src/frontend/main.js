@@ -2,6 +2,7 @@ onload = async () => {
     await new Promise(resolve => setTimeout(resolve, 200));
     btn_ui();
     load_list(servers);
+    loadSettings();
     preload();
     pywebview.api.onload_init();
 };
@@ -196,7 +197,7 @@ const form_clickHandler = e => {
     }
 };
 const form_undisplay = (args) => {
-    const form = document.querySelector(".form");
+    const form = document.querySelector("#form");
     form.style.display = "none";
     document.removeEventListener("click", form_clickHandler);
     document.querySelectorAll(".ui .btn").forEach(btn => btn.disabled = false);
@@ -208,7 +209,7 @@ const form_undisplay = (args) => {
 };
 
 const form_display = async (args) => {
-    const form = document.querySelector(".form");
+    const form = document.querySelector("#form");
     form.style.display = "";
     //await new Promise(resolve => setTimeout(resolve, 100));
     document.addEventListener("click", form_clickHandler);
@@ -307,6 +308,7 @@ function btn_ui() {
         if (id === 'add') {
             addLongPressListener(btn, (e) => {
                 if (e.click) addServer();
+                if (e.longPress) editSetting();
             });
         };
         if (id === 'edit') {
@@ -331,6 +333,66 @@ function btn_ui() {
                 if (e.click) removeServer();
             });
         };
+    });
+}
+
+// settings
+const STORAGE_KEYS = {
+    AUTOUPDATE: 'autoupdate',
+    INTERVAL: 'autoupdateInterval'
+};
+const autoupdate = document.getElementById('autoUpdate');
+const autoupdateInterval = document.getElementById('autoUpdateInterval');
+let updateInterval;
+
+const autoUpdateValue = localStorage.getItem(STORAGE_KEYS.AUTOUPDATE) === 'true';
+autoupdate.checked = autoUpdateValue;
+
+const intervalValue = localStorage.getItem(STORAGE_KEYS.INTERVAL) || '60';
+autoupdateInterval.value = intervalValue;
+
+function saveAndReload(key, value) {
+    localStorage.setItem(key, value);
+    loadSettings();
+}
+autoupdate.addEventListener('change', function () {
+    saveAndReload(STORAGE_KEYS.AUTOUPDATE, this.checked);
+});
+
+autoupdateInterval.addEventListener('change', function () {
+    let value = parseInt(this.value, 10);
+    if (isNaN(value) || value < 10) {
+        value = 10;
+    }
+    this.value = value;
+    saveAndReload(STORAGE_KEYS.INTERVAL, value);
+});
+
+function loadSettings() {
+    if (updateInterval) clearInterval(updateInterval);
+
+    const autoUpdate = localStorage.getItem(STORAGE_KEYS.AUTOUPDATE) === 'true';
+    const intervalStr = localStorage.getItem(STORAGE_KEYS.INTERVAL) || '60';
+    const interval = parseInt(intervalStr, 10);
+
+    if (autoUpdate && !isNaN(interval) && interval >= 10) {
+        updateInterval = setInterval(function () {
+            refreshServer();
+            console.log(Date() + '\n自动刷新间隔：' + interval + '秒');
+        }, interval * 1000); // 1000ms = 1s
+    }
+}
+
+function editSetting() {
+    const setting = document.getElementById('setting');
+    setting.style.display = '';
+    document.querySelectorAll(".ui .btn").forEach(btn => btn.disabled = true);
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('#setting')) {
+            setting.style.display = 'none';
+            document.querySelectorAll(".ui .btn").forEach(btn => btn.disabled = false);
+            document.removeEventListener('click', arguments.callee);
+        }
     });
 }
 

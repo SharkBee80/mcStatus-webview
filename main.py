@@ -8,4 +8,4 @@ if __name__ == '__main__':
 
     API.API(window)
 
-    webview.start(debug=True)
+    webview.start(private_mode=False, debug=True)

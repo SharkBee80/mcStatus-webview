@@ -22,7 +22,7 @@
             <button class="btn" btn_id="remove">删除</button>
         </div>
     </div>
-    <div class="form" style="display: none;">
+    <div class="form" id="form" style="display: none;">
         <div class="form-content">
             <div class="form-title">MineCraft Server</div>
             <div class="form-input">
@@ -34,6 +34,21 @@
             <div class="form-btns">
                 <button class="btn" onclick="confirm()">确定</button>
                 <button class="btn" onclick="cancel()">取消</button>
+            </div>
+        </div>
+    </div>
+    <div class="form" id="setting" style="display: none;">
+        <div class="form-content">
+            <div class="form-title">设置</div>
+            <div class="form-item">
+                <div>
+                    <label for="autoUpdate">自动刷新</label>
+                    <input type="checkbox" id="autoUpdate">
+                </div>
+                <div>
+                    <label for="autoUpdateInterval">自动刷新时间间隔</label>
+                    <input type="number" id="autoUpdateInterval" min="10" placeholder="10s"></input>
+                </div>
             </div>
         </div>
     </div>

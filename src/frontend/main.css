@@ -342,6 +342,13 @@ body {
     margin-block: 5px;
 }
 
+/* setting */
+.form-item {
+    display: flex;
+    flex-direction: column;
+}
+
+
 /* Minecraft Color Classes */
 .mc-black {
     color: #000000;
