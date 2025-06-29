@@ -23,61 +23,68 @@ class Server:
         self.signal = None
 
     def init(self):
-        try:
-            self.elapsed_time = time.time()
+        self.elapsed_time = time.time()
+        max_retries = 3  # 最大重试次数
+        retry_delay = 2  # 重试间隔(秒)
 
-            server_ = JavaServer.lookup(self.address)
-            status = server_.status()
+        for attempt in range(max_retries):
+            try:
+                server_ = JavaServer.lookup(self.address)
+                status = server_.status()
 
-            self.able = True
-            self.on_off = "Online"
-            self.version = status.version.name
-            self.server = server_.address.host.upper()
-            self.online = status.players.online
-            self.max = status.players.max
-            self.players = [{"name": player.name, "uuid": player.id} for player in
-                            status.players.sample] if status.players.sample else None
-            self.icon = status.icon
-            self.motd = status.description
-            self.ping = f"{float(status.latency):.2f} ms"
+                self.able = True
+                self.on_off = "Online"
+                self.version = status.version.name
+                self.server = server_.address.host.upper()
+                self.online = status.players.online
+                self.max = status.players.max
+                self.players = [{"name": player.name, "uuid": player.id} for player in
+                                status.players.sample] if status.players.sample else None
+                self.icon = status.icon
+                self.motd = status.description
+                self.ping = f"{float(status.latency):.2f} ms"
 
-            def rate_signal():
-                if status.latency < 50:
-                    return 5
-                elif status.latency < 125:
-                    return 4
-                elif status.latency < 250:
-                    return 3
-                elif status.latency < 400:
-                    return 2
+                def rate_signal():
+                    if status.latency < 50:
+                        return 5
+                    elif status.latency < 125:
+                        return 4
+                    elif status.latency < 250:
+                        return 3
+                    elif status.latency < 400:
+                        return 2
+                    else:
+                        return 1
+
+                self.signal = rate_signal()
+                break  # 成功则跳出循环
+
+            except Exception as e:
+                print(f"尝试 {attempt + 1}/{max_retries} 失败: {e} 服务器: {self.address}")
+                if attempt < max_retries - 1:
+                    time.sleep(retry_delay)
                 else:
-                    return 1
-
-            self.signal = rate_signal()
-
-        except Exception as e:
-            print(e, self.address)
-
-            self.able = False
-            self.on_off = "Offline"
-            self.version = None
-            self.server = None
-            self.online = None
-            self.max = None
-            self.players = None
-            self.motd = None
-            self.icon = None
-            self.ping = None
-            self.signal = 0
-        finally:
-            self.elapsed_time = f"{(time.time() - self.elapsed_time):.2f} ms"
-            output = {"able": self.able, "status": self.on_off, "version": self.version, "server": self.server,
-                      "online": self.online, "max": self.max, "players": self.players, "icon": self.icon,
-                      "motd": self.motd, "ping": self.ping, "signal": self.signal,
-                      "updatetime": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-                      "elapsed_time": self.elapsed_time
-                      }
-            return output
+                    self.able = False
+                    self.on_off = "Offline"
+                    self.version = None
+                    self.server = None
+                    self.online = None
+                    self.max = None
+                    self.players = None
+                    self.motd = None
+                    self.icon = None
+                    self.ping = None
+                    self.signal = 0
+            finally:
+                continue
+        self.elapsed_time = f"{(time.time() - self.elapsed_time):.2f} ms"
+        output = {"able": self.able, "status": self.on_off, "version": self.version, "server": self.server,
+                  "online": self.online, "max": self.max, "players": self.players, "icon": self.icon,
+                  "motd": self.motd, "ping": self.ping, "signal": self.signal,
+                  "updatetime": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                  "elapsed_time": self.elapsed_time
+                  }
+        return output
 
 
 if __name__ == "__main__":

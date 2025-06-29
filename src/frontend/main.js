@@ -97,6 +97,10 @@ function load_list(data) {
 }
 
 function updateAll() {
+    const imgs = serverList.querySelectorAll(".server-item .server-item-signal img");
+    imgs.forEach(img => {
+        img.src = "./assets/img/singal/loading.gif";
+    });
     servers.forEach(item => {
         pywebview.api.updateServer(item.id);
     });
@@ -239,7 +243,8 @@ function editServer() {
 
 function refreshServer() {
     selected = null;
-    pywebview.api.refreshServer();
+    //pywebview.api.refreshServer();
+    updateAll();
     noty("正在刷新服务器列表")
 }
 
