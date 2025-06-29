@@ -135,8 +135,8 @@ function updateServer(item) {
         <div class="server-item-icon">
             <img src="${item.icon || icon}" alt="Icon"></img>
             <div class="server-item-actions">
-                <button class="btn2 up" onclick="moveUp(${id})">▲</button>
-                <button class="btn2 down" onclick="moveDown(${id})">▼</button>
+                <button class="btn2 up" onclick="moveUp(${item.id})">▲</button>
+                <button class="btn2 down" onclick="moveDown(${item.id})">▼</button>
             </div>
         </div>
         <div class="server-item-info">
