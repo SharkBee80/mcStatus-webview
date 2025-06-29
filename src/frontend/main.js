@@ -1,6 +1,6 @@
 onload = async () => {
     await new Promise(resolve => setTimeout(resolve, 200));
-
+    btn_ui();
     load_list(servers);
     pywebview.api.onload_init();
 };
@@ -239,12 +239,20 @@ function editServer() {
 
         editid = selected[1];
     }
+    else {
+        noty("请选择一个服务器")
+    }
 }
 
 function refreshServer() {
     selected = null;
-    //pywebview.api.refreshServer();
     updateAll();
+    noty("正在刷新服务器")
+}
+
+function refreshList() {
+    selected = null;
+    pywebview.api.refreshServer();
     noty("正在刷新服务器列表")
 }
 
@@ -264,7 +272,44 @@ function removeServer() {
     }
 }
 
+function btn_ui() {
+    const btns = document.querySelectorAll(".ui .btn");
+    console.log(btns);
+    btns.forEach(btn => {
+        const id = btn.getAttribute("btn_id");
+        if (id === 'add') {
+            addLongPressListener(btn, (e) => {
+                if (e.click) addServer();
+            });
+        };
+        if (id === 'edit') {
+            addLongPressListener(btn, (e) => {
+                if (e.click) editServer();
+                if (e.longPress) {
+                    serverList.querySelectorAll(".server-item").forEach(item => {
+                        item.classList.remove("selected");
+                    });
+                    selected = null;
+                };
+            });
+        }
+        if (id === 'refresh') {
+            addLongPressListener(btn, (e) => {
+                if (e.click) refreshServer();
+                if (e.longPress) refreshList();
+            });
+        };
+        if (id === 'remove') {
+            addLongPressListener(btn, (e) => {
+                if (e.click) removeServer();
+            });
+        };
+    });
+}
+
 // other
+
+// minecraft motd color
 function parseMOTD(input) {
     const colorMap = {
         '§0': 'mc-black',
@@ -322,4 +367,69 @@ function parseMOTD(input) {
     }
 
     return result || 'No description available';
+}
+
+// 按钮事件
+/**
+ * @description 长、短按监听
+ * @param {Element} element 监听元素
+ * @param {Function} callback 回调函数 {type:}
+ * @param {Number} threshold 阈值，默认700ms
+ * @example 
+ * addLongPressListener(element, (e) => {
+ *      e.click === true;
+ *      e.longPress === false;
+ *      e.element === element;
+ * }, 700);
+ */
+function addLongPressListener(element, callback, threshold = 700) {
+    let pressTimer = null;
+    let isLongPress = false;
+
+    const start = (e) => {
+        if (pressTimer !== null) return;
+
+        isLongPress = false;
+
+        // 防止触发默认行为（如文本选择）
+        e.preventDefault();
+
+        // 移动端振动反馈
+        if (e.type === 'touchstart' && window.navigator.vibrate) {
+            window.navigator.vibrate(50);
+        }
+
+        pressTimer = setTimeout(() => {
+            isLongPress = true;
+            callback({ click: false, longPress: true, element: element });
+            pressTimer = null;
+        }, threshold);
+    };
+
+    const cancel = (e) => {
+        if (pressTimer !== null) {
+            clearTimeout(pressTimer);
+
+            if (!isLongPress && (e.type === 'mouseup' || 'touchend')) {
+                callback({ click: true, longPress: false, element: element });
+            }
+
+            pressTimer = null;
+            isLongPress = false;
+        }
+    };
+
+    function isTouchDevice() {
+        return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    }
+
+    // 添加事件监听
+    // mouse
+    element.addEventListener('mousedown', start);
+    element.addEventListener('mouseup', cancel);
+    element.addEventListener('mouseleave', cancel);
+    // touch
+    element.addEventListener('touchstart', start);
+    element.addEventListener('touchend', cancel);
+    element.addEventListener('touchcancel', cancel);
 }
