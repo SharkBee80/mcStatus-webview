@@ -70,8 +70,9 @@ function load_list(data) {
                 </div>
             </div>
             <div class="server-item-info">
-                <div class="server-item-name" id="server-item-name">${item.name}</a></div>
-                <div class="server-item-motd" id="server-item-motd">A MineCraft Server</a></div>
+                <div class="server-item-name" id="server-item-name">${item.name}</div>
+                <div class="server-item-address" id="server-item-address">${item.address}</div>
+                <div class="server-item-motd" id="server-item-motd">A MineCraft Server</div>
             </div>
             <div class="server-item-signal">
                 <img src="./assets/img/singal/loading.gif" alt="" id="server-item-loading">
@@ -140,8 +141,9 @@ function updateServer(item) {
             </div>
         </div>
         <div class="server-item-info">
-            <div class="server-item-name" id="server-item-name">${item.name}</a></div>
-            <div class="server-item-motd" id="server-item-motd">${motd}</a></div>
+            <div class="server-item-name" id="server-item-name">${item.name}</div>
+            <div class="server-item-address" id="server-item-address">${item.address}</div>
+            <div class="server-item-motd" id="server-item-motd">${motd}</div>
         </div>
         <div class="server-item-signal">
             <a>${item.able ? `${item.online}/${item.max}` : ""}</a>

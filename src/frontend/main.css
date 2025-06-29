@@ -141,9 +141,31 @@ body {
 }
 
 .server-item-name {
-    color: chartreuse;
+    background-image: -webkit-linear-gradient(left, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 8.33%, rgb(0, 255, 0) 16.67%, rgb(0, 255, 255) 25%, rgb(0, 0, 255) 33.33%, rgb(255, 0, 255) 41.67%,
+            rgb(255, 0, 0) 50%, rgb(255, 0, 255) 58.33%, rgb(0, 0, 255) 66.67%, rgb(0, 255, 255) 75%, rgb(0, 255, 0) 83.33%, rgb(255, 225, 0) 91.67%, rgb(255, 0, 0) 100%);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-background-size: 200% 100%;
+    -webkit-animation: maskedAnimation 12s infinite linear;
+
     font-weight: bolder;
     font-size: 13px;
+}
+
+@keyframes maskedAnimation {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+
+}
+
+.server-item-address {
+    color: chartreuse;
+    font-size: 10px;
 }
 
 .server-item-motd {
