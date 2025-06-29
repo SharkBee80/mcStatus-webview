@@ -1,6 +1,6 @@
 import webview
-from src.backend import API, get_path
-url = get_path.get_path('./src/frontend/index.html')
+from src.backend import API
+url = './src/frontend/index.html'
 
 if __name__ == '__main__':
     webview.settings['OPEN_DEVTOOLS_IN_DEBUG'] = False

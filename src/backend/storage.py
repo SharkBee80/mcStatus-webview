@@ -1,10 +1,20 @@
 import json
-from src.backend.get_path import get_path
+import os
+import sys
+from pathlib import Path
 
+def get_app_path(relative_path):
+    if getattr(sys, 'frozen', False):  # 打包后
+        CONFIG_DIR_NAME = ".mcstatus"
+        base_path = Path(sys.executable).parent / CONFIG_DIR_NAME  # exe所在目录
+    else:  # 开发环境
+        base_path = Path(__file__).parent.parent.parent
+    return (base_path / relative_path).resolve()
 
 class Storage:
     def __init__(self):
-        self.path = get_path("./src/data.json")
+        self.path = get_app_path("data.json")
+        os.makedirs(self.path.parent, exist_ok=True)  # 自动创建目录
         self.data = []
         self.load()
 
