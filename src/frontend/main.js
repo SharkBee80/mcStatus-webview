@@ -177,7 +177,7 @@ function moveDown(id) {
 
 //ui
 const form_clickHandler = e => {
-    if (!e.target.closest(".form-content") && !e.target.closest(".btn")) {
+    if (!e.target.closest(".form-content")) {
         form_undisplay();
     }
 };
@@ -185,7 +185,7 @@ const form_undisplay = (args) => {
     const form = document.querySelector(".form");
     form.style.display = "none";
     document.removeEventListener("click", form_clickHandler);
-
+    document.querySelectorAll(".ui .btn").forEach(btn => btn.disabled = false);
     if (args === 0) {
         document.querySelector("#server-name").value = "";
         document.querySelector("#server-address").value = "";
@@ -193,11 +193,16 @@ const form_undisplay = (args) => {
     editid = null;
 };
 
-async function addServer() {
+const form_display = async (args) => {
     const form = document.querySelector(".form");
     form.style.display = "";
     //await new Promise(resolve => setTimeout(resolve, 100));
     document.addEventListener("click", form_clickHandler);
+    document.querySelectorAll(".ui .btn").forEach(btn => btn.disabled = true);
+};
+
+function addServer() {
+    form_display();
 }
 
 let editid = null;
@@ -243,10 +248,8 @@ function editServer() {
     if (selected) {
         document.querySelector("#server-name").value = selected[2];
         document.querySelector("#server-address").value = selected[3];
-        const form = document.querySelector(".form");
-        form.style.display = "";
-        //await new Promise(resolve => setTimeout(resolve, 100));
-        document.addEventListener("click", form_clickHandler);
+
+        form_display();
 
         editid = selected[1];
     }
