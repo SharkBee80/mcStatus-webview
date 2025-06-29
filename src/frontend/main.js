@@ -138,7 +138,6 @@ function updateServer(item) {
     const server_item = document.querySelector('#listitem_' + item.id);
     //server_item.innerHTML = ""; // 清空现有内容
 
-    const id = server_item.id;
     const motd = item.motd ? parseMOTD(String(item.motd)) : "A MineCraft Server";
     const players = () => {
         if (item.players) {
@@ -241,6 +240,25 @@ function confirm() {
             if (editid === selected[1]) {
                 selected[2] = server.name;
                 selected[3] = server.address;
+                const server_item = document.getElementById(selected[0]);
+                server_item.innerHTML = `
+                    <div class="server-item-icon">
+                        <img src="${icon}" alt="Icon"></img>
+                        <div class="server-item-actions">
+                            <button class="btn2 up" onclick="moveUp(${selected[0]})">▲</button>
+                            <button class="btn2 down" onclick="moveDown(${selected[0]})">▼</button>
+                        </div>
+                    </div>
+                    <div class="server-item-info">
+                        <div class="server-item-name" id="server-item-name">${server.name}</div>
+                        <div class="server-item-address" id="server-item-address">${server.address}</div>
+                        <div class="server-item-motd" id="server-item-motd">A MineCraft Server</div>
+                    </div>
+                    <div class="server-item-signal">
+                        <img src="./assets/img/singal/loading.gif" alt="">
+                        <div class="tooltip"></div>
+                    </div>
+                `;
             }
             pywebview.api.editServer(server);
         }
