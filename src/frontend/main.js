@@ -129,7 +129,7 @@ function updateServer(item) {
     });
 
     const server_item = document.querySelector('#listitem_' + item.id);
-    server_item.innerHTML = ""; // 清空现有内容
+    //server_item.innerHTML = ""; // 清空现有内容
 
     const id = server_item.id;
     const motd = item.motd ? parseMOTD(String(item.motd)) : "A MineCraft Server";

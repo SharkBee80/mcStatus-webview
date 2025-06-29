@@ -214,7 +214,8 @@ body {
     display: flex;
     width: max-content;
     background-color: rgb(128, 128, 128);
-    color: #fff;
+    color: antiquewhite;
+    border: rgba(0, 0, 0, 0.5) solid 2px;
     text-align: start;
     padding: 5px 8px;
     border-radius: 6px;
