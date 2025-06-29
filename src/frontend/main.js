@@ -108,6 +108,13 @@ function updateAll() {
 
 function updateServer(item) {
     console.log(item);
+    servers.forEach(ser => {
+        if (ser.id === item.id) {
+            ser.name = item.name;
+            ser.address = item.address;
+        };
+    });
+
     const server_item = document.querySelector('#listitem_' + item.id);
     server_item.innerHTML = ""; // 清空现有内容
 
@@ -201,10 +208,14 @@ function confirm() {
         const server = {
             name: name ? name : "MineCraft Server",
             address,
+            id: editid
         };
         console.log(server);
         if (editid) {
-            server.id = editid;
+            if (editid === selected[1]) {
+                selected[2] = server.name;
+                selected[3] = server.address;
+            }
             pywebview.api.editServer(server);
         }
         else {
@@ -274,7 +285,6 @@ function removeServer() {
 
 function btn_ui() {
     const btns = document.querySelectorAll(".ui .btn");
-    console.log(btns);
     btns.forEach(btn => {
         const id = btn.getAttribute("btn_id");
         if (id === 'add') {

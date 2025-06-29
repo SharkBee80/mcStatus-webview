@@ -20,6 +20,10 @@ class API:
         self.load_data()
 
     def load_data(self):
+        combined_list = []
+        for i in storage.data:
+            combined = {i['name'], i['address'], i['id']}
+            combined_list.append(combined)
         self.window.evaluate_js(f"load_list({json.dumps(storage.data)})")
 
     def updateServer(self, id):
@@ -67,7 +71,7 @@ class API:
                   }
 
         storage.editServer(server)
-        self.refreshServer()
+        self.updateServer(id)
 
     def refreshServer(self):
         self.load_data()
