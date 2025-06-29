@@ -190,6 +190,7 @@ body {
     height: 32px;
     align-items: center;
     flex-wrap: wrap;
+    margin-right: -6px;
 }
 
 .server-item-signal a {

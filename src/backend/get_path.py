@@ -9,5 +9,5 @@ def get_path(relative_path):
         base_path = os.path.abspath(".")
 
     out_path = os.path.normpath(os.path.join(base_path, relative_path))
-    print(out_path)
+    # print(out_path)
     return out_path

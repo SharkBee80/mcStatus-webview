@@ -1,2 +1,5 @@
 .idea
 /data.json
+/build
+/dist
+/mcstatus.spec

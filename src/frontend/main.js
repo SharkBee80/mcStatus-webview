@@ -1,9 +1,8 @@
 onload = async () => {
     await new Promise(resolve => setTimeout(resolve, 200));
     btn_ui();
-    load_list(servers);
     loadSettings();
-    preload();
+    //preload();
     pywebview.api.onload_init();
 };
 
@@ -24,6 +23,12 @@ function hideBtns(el) {
 const preload = () => {
     const urls = [
         './assets/img/dark_oak_log.png',
+        './assets/img/singal/0.png',
+        './assets/img/singal/1.png',
+        './assets/img/singal/2.png',
+        './assets/img/singal/3.png',
+        './assets/img/singal/4.png',
+        './assets/img/singal/5.png',
     ];
     urls.forEach(src => {
         const url = new Image();
@@ -44,10 +49,10 @@ let selected = null;
 let servers = [
     {
         able: false,
-        address: "0.0.0.0",
+        address: "127.0.0.1",
         addtime: "2025-06-28 16:28:15",
         edittime: "2025-06-28 16:28:15",
-        fulladdress: "0.0.0.0:25565",
+        fulladdress: "127.0.0.1:25565",
         icon: null,
         id: 1751099295,
         max: null,
@@ -88,7 +93,8 @@ function load_list(data) {
                 <div class="server-item-motd" id="server-item-motd">A MineCraft Server</div>
             </div>
             <div class="server-item-signal">
-                <img src="./assets/img/singal/loading.gif" alt="" id="server-item-loading">
+                <img src="./assets/img/singal/loading.gif" alt="">
+                <div class="tooltip"></div>
             </div>
         `;
         serverList.appendChild(div);
