@@ -10,7 +10,7 @@ class Storage:
 
     def load(self):
         try:
-            with open(self.path, 'r') as f:
+            with open(self.path, 'r', encoding='utf-8') as f:
                 self.data = json.load(f)
         except FileNotFoundError:
             self.data = []
@@ -20,8 +20,8 @@ class Storage:
             self.save()
 
     def save(self):
-        with open(self.path, 'w') as f:
-            json.dump(self.data, f, indent=4)
+        with open(self.path, 'w', encoding='utf-8') as f:
+            json.dump(self.data, f, indent=4, ensure_ascii=False)
 
     def addServer(self, data):
         self.data.insert(0, data)  # 插入到顶部
