@@ -69,6 +69,10 @@ body {
     padding: 6px;
 }
 
+.server-item:hover {
+    border: 3px solid rgba(0, 100, 255, 0.75);
+}
+
 .selected {
     background-color: rgb(255 255 255 / 50%);
     background-image: url("./assets/img/dark_oak_log.png");
