@@ -410,9 +410,11 @@ function loadSettings() {
     const interval = parseInt(intervalStr, 10);
 
     if (autoUpdate && !isNaN(interval) && interval >= 10) {
-        updateInterval = setInterval(function () {
+        updateInterval = setInterval(async function () {
+            const random = Math.floor(Math.random() * 10)
+            await new Promise(resolve => setTimeout(resolve, random * 1000));
             refreshServers();
-            console.log(Date() + '\n自动刷新间隔：' + interval + '秒');
+            console.log(Date() + '\n自动刷新间隔：' + (interval + random) + '秒');
         }, interval * 1000); // 1000ms = 1s
     }
 }
