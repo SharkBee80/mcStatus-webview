@@ -20,6 +20,9 @@ pip install pyinstaller
 ```shell
 pyinstaller --onefile --noconsole --clean --add-data="src;src" --exclude-module=PyQt5 --name mcstatus --icon=mc.ico main.py
 ```
+```shell
+pyinstaller --onefile --noconsole --add-data="src;src" --exclude-module=PyQt5 --name mcstatus --icon=mc.ico main.py
+```
 * 打包了哪些模块
 ```shell
 pyi-archive_viewer dist/mcstatus.exe
