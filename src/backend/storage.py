@@ -4,7 +4,7 @@ from src.backend import get_path
 
 class Storage:
     def __init__(self):
-        self.path = get_path.get_path("data.json")
+        self.path = get_path.get_path("data.json", use_mei_pass=False)
         self.data = []
         self.load()
 
