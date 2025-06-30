@@ -35,6 +35,8 @@ class Storage:
                 self.data[i]['address'] = data['address']
                 self.data[i]['fulladdress'] = data['fulladdress']
                 self.data[i]['edittime'] = data['edittime']
+                item = self.data.pop(i)
+                self.data.insert(0, item)
                 self.save()
                 return True
         return False

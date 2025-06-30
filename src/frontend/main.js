@@ -259,6 +259,8 @@ function confirmed() {
                         <div class="tooltip"></div>
                     </div>
                 `;
+                const firstItem = serverList.firstChild;
+                server_item.parentNode.insertBefore(server_item, firstItem);
             }
             pywebview.api.editServer(server);
         }
