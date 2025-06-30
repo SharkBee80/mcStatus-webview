@@ -31,7 +31,7 @@ def get_path(relative_path: str, output_type: str = None, config_dir_name: str =
             if not base_path.exists():
                 base_path.mkdir(parents=True, exist_ok=True)
                 created = True
-            descript = f"这里是{get_program_name()}的配置文件"
+            descript = f".这里是{get_program_name()}的配置文件"
             if created:
                 try:
                     with open(base_path / descript, "w", encoding="utf-8") as f:
