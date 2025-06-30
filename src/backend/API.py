@@ -12,7 +12,7 @@ class API:
     def __init__(self, window):
         self.window: webview.Window = window
         self.window.expose(self.onload_init, self.updateServer, self.addServer, self.editServer,
-                           self.refreshServer, self.removeServer, self.moveUp, self.moveDown)
+                           self.refreshList, self.removeServer, self.moveUp, self.moveDown)
 
     def onload_init(self):
         self.load_data()
@@ -55,7 +55,7 @@ class API:
                   }
         print(server)
         storage.addServer(server)
-        self.refreshServer()
+        self.refreshList()
 
     def editServer(self, data):
         name, address, id = data['name'], data['address'], data['id']
@@ -71,7 +71,7 @@ class API:
         storage.editServer(server)
         self.updateServer(id)
 
-    def refreshServer(self):
+    def refreshList(self):
         self.load_data()
 
     def removeServer(self, id):

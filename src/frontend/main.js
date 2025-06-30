@@ -297,16 +297,23 @@ function editServer() {
     }
 }
 
-function refreshServer() {
-    selected = null;
+function refreshServers() {
     updateAll();
     noty("正在刷新服务器")
 }
 
 function refreshList() {
-    selected = null;
-    pywebview.api.refreshServer();
+    pywebview.api.refreshList();
     noty("正在刷新服务器列表")
+}
+
+function refreshOneServer() {
+    if (selected) {
+        const img = serverList.querySelector(`#${selected[0]} .server-item-signal img`);
+        img.src = "./assets/img/singal/loading.gif";
+        pywebview.api.updateServer(selected[1]);
+        noty(`刷新服务器:\n${selected[2]}\n${selected[3]}`);
+    }
 }
 
 function removeServer() {
@@ -350,13 +357,14 @@ function btn_ui() {
         }
         if (id === 'refresh') {
             addLongPressListener(btn, (e) => {
-                if (e.click) refreshServer();
+                if (e.click) refreshServers();
                 if (e.longPress) refreshList();
             });
         };
         if (id === 'remove') {
             addLongPressListener(btn, (e) => {
                 if (e.click) removeServer();
+                if (e.longPress) refreshOneServer();
             });
         };
     });
@@ -403,7 +411,7 @@ function loadSettings() {
 
     if (autoUpdate && !isNaN(interval) && interval >= 10) {
         updateInterval = setInterval(function () {
-            refreshServer();
+            refreshServers();
             console.log(Date() + '\n自动刷新间隔：' + interval + '秒');
         }, interval * 1000); // 1000ms = 1s
     }
