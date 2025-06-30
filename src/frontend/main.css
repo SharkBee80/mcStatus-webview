@@ -27,6 +27,7 @@ body {
     margin-block: 4px 10px;
     max-height: calc(100% - 10px - 10px - 4px);
     flex-grow: 1;
+    overflow-x: hidden;
     overflow-y: auto;
     background-color: rgb(162 168 255);
     border-radius: 5px;
@@ -205,6 +206,21 @@ body {
     height: fit-content;
 }
 
+.server-item-players,
+.server-item-ping {
+    position: relative;
+}
+
+.server-item-players::before,
+.server-item-ping::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    bottom: -10px;
+    left: -10px;
+}
+
 .tooltip {
     position: relative;
     display: inline-block;
@@ -227,7 +243,7 @@ body {
 
     /* 定位 */
     position: absolute;
-    transform: translate(calc(-100% - 6px), calc(0% + 14px));
+    transform: translate(calc(-100% - 6px), calc(0% + 0px));
     /* transform: translate(calc(-100% - 40px - 6px), calc(-25%); */
     z-index: 998;
 }
@@ -236,7 +252,8 @@ body {
     margin: 0;
 }
 
-.server-item-signal:hover .tooltip .tooltiptext {
+.server-item-players:hover .tooltip .tooltiptext,
+.server-item-ping:hover .tooltip .tooltiptext {
     visibility: visible;
     display: unset;
     opacity: 1;

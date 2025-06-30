@@ -69,6 +69,33 @@ let servers = [
     },
 ]
 
+const template = (serverdata) => {
+    return `
+        <div class="server-item-icon">
+            <img src="${icon}" alt="Icon"></img>
+            <div class="server-item-actions">
+                <button class="btn2 up" onclick="moveUp(${serverdata.id})">▲</button>
+                <button class="btn2 down" onclick="moveDown(${serverdata.id})">▼</button>
+            </div>
+        </div>
+        <div class="server-item-info">
+            <div class="server-item-name" id="server-item-name">${serverdata.name}</div>
+            <div class="server-item-address" id="server-item-address">${serverdata.address}</div>
+            <div class="server-item-motd" id="server-item-motd">A MineCraft Server</div>
+        </div>
+        <div class="server-item-signal">
+            <div class="server-item-players">
+                <a></a>
+                <div class="tooltip"></div>
+            </div>
+            <div class="server-item-ping">
+                <img src="./assets/img/singal/loading.png" alt="">
+                <div class="tooltip"></div>
+            </div>
+        </div>
+    `;
+};
+
 function load_list(data) {
     servers = data;
     serverList.innerHTML = ""; // 清空现有内容
@@ -79,24 +106,7 @@ function load_list(data) {
         const id = item.id !== ('' || undefined) ? item.id : 'withoutid_' + itemid();
         div.id = 'listitem_' + id;
 
-        div.innerHTML = `
-            <div class="server-item-icon">
-                <img src="${icon}" alt="Icon"></img>
-                <div class="server-item-actions">
-                    <button class="btn2 up" onclick="moveUp(${id})">▲</button>
-                    <button class="btn2 down" onclick="moveDown(${id})">▼</button>
-                </div>
-            </div>
-            <div class="server-item-info">
-                <div class="server-item-name" id="server-item-name">${item.name}</div>
-                <div class="server-item-address" id="server-item-address">${item.address}</div>
-                <div class="server-item-motd" id="server-item-motd">A MineCraft Server</div>
-            </div>
-            <div class="server-item-signal">
-                <img src="./assets/img/singal/loading.gif" alt="">
-                <div class="tooltip"></div>
-            </div>
-        `;
+        div.innerHTML = template(item);
         serverList.appendChild(div);
         div.addEventListener("click", (e) => {
             if (e.target.closest('.server-item-actions')) {
@@ -164,10 +174,17 @@ function updateServer(item) {
             <div class="server-item-motd" id="server-item-motd">${motd}</div>
         </div>
         <div class="server-item-signal">
-            <a>${item.able ? `${item.online}/${item.max}` : ""}</a>
-            <img src="./assets/img/singal/${item.signal}.png" alt="">
-            <div class="tooltip">
-                ${players()}
+            <div class="server-item-players">
+                <a>${item.able ? `${item.online}/${item.max}` : ""}</a>
+                <div class="tooltip">
+                    ${players()}
+                </div>
+            </div>
+            <div class="server-item-ping">
+                <img src="./assets/img/singal/${item.signal}.png" alt="">
+                <div class="tooltip">
+                    <div class="tooltiptext">${item.ping ?? "无连接"}</div>
+                </div>
             </div>
         </div>
     `;
@@ -241,24 +258,7 @@ function confirmed() {
                 selected[2] = server.name;
                 selected[3] = server.address;
                 const server_item = document.getElementById(selected[0]);
-                server_item.innerHTML = `
-                    <div class="server-item-icon">
-                        <img src="${icon}" alt="Icon"></img>
-                        <div class="server-item-actions">
-                            <button class="btn2 up" onclick="moveUp(${selected[0]})">▲</button>
-                            <button class="btn2 down" onclick="moveDown(${selected[0]})">▼</button>
-                        </div>
-                    </div>
-                    <div class="server-item-info">
-                        <div class="server-item-name" id="server-item-name">${server.name}</div>
-                        <div class="server-item-address" id="server-item-address">${server.address}</div>
-                        <div class="server-item-motd" id="server-item-motd">A MineCraft Server</div>
-                    </div>
-                    <div class="server-item-signal">
-                        <img src="./assets/img/singal/loading.gif" alt="">
-                        <div class="tooltip"></div>
-                    </div>
-                `;
+                server_item.innerHTML = template(server);
                 const firstItem = serverList.firstChild;
                 server_item.parentNode.insertBefore(server_item, firstItem);
             }
