@@ -226,7 +226,7 @@ function addServer() {
 }
 
 let editid = null;
-function confirm() {
+function confirmed() {
     const name = document.querySelector("#server-name").value;
     const address = document.querySelector("#server-address").value;
     if (address) {
@@ -318,10 +318,12 @@ function removeServer() {
             selected = null;
             update(server);
         }*/
-        serverList.querySelector(`#${selected[0]}`)?.remove();
-        pywebview.api.removeServer(selected[1]);
-        noty(`已删除服务器:${selected[2]}`);
-        selected = null;
+        if (confirm("确定要删除服务器吗？")) {
+            serverList.querySelector(`#${selected[0]}`)?.remove();
+            pywebview.api.removeServer(selected[1]);
+            noty(`已删除服务器:${selected[2]}`);
+            selected = null;
+        }
     }
 }
 
