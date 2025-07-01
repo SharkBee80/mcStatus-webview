@@ -2,7 +2,7 @@ onload = async () => {
     await new Promise(resolve => setTimeout(resolve, 200));
     btn_ui();
     loadSettings();
-    //preload();
+    preload();
     pywebview.api.onload_init();
 };
 
@@ -21,18 +21,43 @@ function hideBtns(el) {
 */
 // 预加载
 const preload = () => {
+    const d = []
+    console.log("preload start");
+    const div = document.createElement("div")
+    div.style = "display: none; visibility: hidden; opacity: 0;";
+    document.body.appendChild(div);
+
     const urls = [
+        /*
+        './assets/img/img.png',
+        './assets/img/stone.png',
+        './assets/img/dirt_path_top.png',
         './assets/img/dark_oak_log.png',
+        './assets/img/options_background.png',
+        './assets/img/light_dirt_background.png',
         './assets/img/singal/0.png',
         './assets/img/singal/1.png',
         './assets/img/singal/2.png',
         './assets/img/singal/3.png',
         './assets/img/singal/4.png',
         './assets/img/singal/5.png',
+        './assets/img/singal/loading.gif',
+        './assets/img/btn/up.png',
+        './assets/img/btn/up_hover.png',
+        './assets/img/btn/down.png',
+        './assets/img/btn/down_hover.png',
+        */
+        './assets/img/dark_oak_log.png',
     ];
     urls.forEach(src => {
-        const url = new Image();
-        url.src = src;
+        const img = document.createElement("img");
+        div.appendChild(img);
+        img.src = src;
+        d.push(new Promise(resolve => img.onload = resolve));
+    });
+    Promise.all(d).then(() => {
+        div.remove();
+        console.log("preload done");
     });
 };
 
