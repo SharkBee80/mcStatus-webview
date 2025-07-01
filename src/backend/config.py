@@ -24,7 +24,7 @@ class config:
         with open(self.path, "w+", encoding="utf-8") as f:
             self.cf.write(f)  # type: ignore
 
-    def write_config(self, section: str | None, option: str, value: str | None = "") -> None:
+    def write_config(self, section: str | None, option: str, value: str | bool | None = "") -> None:
         """
 
         :param section: 类,若为空则使用 "DEFAULT_"
@@ -43,7 +43,7 @@ class config:
             if not value:
                 value = ""
             # 写入option值
-            self.cf.set(section, str(option), value)
+            self.cf.set(section, str(option), str(value))
         self._with_file()
 
     def read_config(self, section: str | None, option: str) -> str | None:
@@ -121,6 +121,8 @@ class config:
 
             if value is not None:
                 result[section][option] = value
+            else:
+                result[section][option] = ""
         return result
 
 
