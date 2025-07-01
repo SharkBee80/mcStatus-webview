@@ -8,6 +8,10 @@ pip freeze
 pip uninstall -y -r packages.txt
 pip cache purge
 ```
+* 升级
+```shell
+python.exe -m pip install --upgrade pip
+```
 * 安装所有包
 ```shell
 pip install -r requirements.txt
