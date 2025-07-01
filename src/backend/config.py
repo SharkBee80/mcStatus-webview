@@ -40,7 +40,7 @@ class config:
         if not option:
             pass
         else:
-            if not value:
+            if value is None or value == "":
                 value = ""
             # 写入option值
             self.cf.set(section, str(option), str(value))
@@ -88,17 +88,17 @@ class config:
             self.cf.remove_section(section)
         self._with_file()
 
-    def set_config(self, json: list[dict[str, str]]):
+    def set_config(self, items: list[dict[str, str]]):
         """
         批量写入配置项
-        :param json: list[{"section": "a", "option": "b", "value": "c"}]
+        :param items: list[{"section": "a", "option": "b", "value": "c"}]
         :raises: TypeError 如果输入格式不符合要求
         """
-        if not isinstance(json, list):
-            raise TypeError("参数 json 必须是列表类型")
-        for i in json:
+        if not isinstance(items, list):
+            raise TypeError("参数 items 必须是列表类型")
+        for i in items:
             if not isinstance(i, dict):
-                raise TypeError("json 列表中的每个元素必须是字典")
+                raise TypeError("items 列表中的每个元素必须是字典")
             section = i.get('section')
             option = i.get('option')  # 如果没有 'option' 键，则返回 None
             value = i.get('value')
