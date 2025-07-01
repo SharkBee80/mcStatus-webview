@@ -17,3 +17,8 @@ class timer_:
         self.timer = Timer(self.delay, callback, args)
         self.timer.daemon = True  # 守护线程，避免阻塞主程序退出
         self.timer.start()
+
+    def cancel(self):
+        """取消定时任务"""
+        if self.timer:
+            self.timer.cancel()

@@ -3,9 +3,15 @@ import time
 
 import webview
 
-from src.backend import storage, listen
+from src.backend import storage, listen, get_path, config, timer
 
 storage = storage.Storage()
+get_path = get_path.get_path('config.ini', use_mei_pass=False)
+config = config.config(get_path)
+
+DELAY = 0.25
+move_timer = timer.timer_(DELAY)
+resize_timer = timer.timer_(DELAY)
 
 
 class API:
@@ -84,3 +90,33 @@ class API:
 
     def moveDown(self, id):
         storage.moveDown(id)
+
+    # window.events
+    def on_moved(self, x, y):
+        def record_position():
+            if x < -2000:
+                return
+            if y < -2000:
+                return
+            config.write_config('mainwindow', 'x', x)
+            config.write_config('mainwindow', 'y', y)
+
+        move_timer.task(record_position)
+
+    def on_resized(self, width, height):
+        def record_size():
+            if width < 0 or webview.screens[0].width <= width:
+                return
+            if height < 0 or webview.screens[0].height <= height:
+                return
+            config.write_config('mainwindow', 'width', width)
+            config.write_config('mainwindow', 'height', height)
+
+        resize_timer.task(record_size)
+
+    def on_maximized(self):
+        config.write_config('mainwindow', 'maximized', True)
+        move_timer.cancel()
+
+    def on_restored(self):
+        config.write_config('mainwindow', 'maximized', False)
