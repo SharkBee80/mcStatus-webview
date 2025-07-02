@@ -34,6 +34,8 @@ class API:
         for i in storage.data:
             if i['id'] == id:
                 status = listen.Server(i['fulladdress']).init()
+                if status is None:
+                    return
                 combined = {**i, **status}
                 self.window.evaluate_js(f"updateServer({json.dumps(combined)})")
 

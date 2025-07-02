@@ -2,6 +2,8 @@ import time
 
 from mcstatus import JavaServer
 
+have_address = []
+
 
 class Server:
     def __init__(self, fulladdress):
@@ -23,6 +25,9 @@ class Server:
         self.signal = None
 
     def init(self):
+        if self.address in have_address:
+            return None
+        have_address.append(self.address)
         self.elapsed_time = time.time()
         max_retries = 3  # 最大重试次数
         retry_delay = 2  # 重试间隔(秒)
@@ -77,6 +82,7 @@ class Server:
                     self.signal = 0
             finally:
                 continue
+        have_address.remove(self.address)
         self.elapsed_time = f"{(time.time() - self.elapsed_time):.2f} ms"
         output = {"able": self.able, "status": self.on_off, "version": self.version, "server": self.server,
                   "online": self.online, "max": self.max, "players": self.players, "icon": self.icon,
