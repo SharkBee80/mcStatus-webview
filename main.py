@@ -45,4 +45,4 @@ if __name__ == '__main__':
     window.events.maximized += api.on_maximized
     window.events.restored += api.on_restored
 
-    webview.start(private_mode=False)
+    webview.start()

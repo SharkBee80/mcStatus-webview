@@ -6,8 +6,8 @@ import webview
 from src.backend import storage, listen, get_path, config, timer
 
 storage = storage.Storage()
-get_path = get_path.get_path('config.ini', use_mei_pass=False)
-config = config.config(get_path)
+
+config = config.config(get_path.get_path('config.ini', use_mei_pass=False))
 
 DELAY = 0.25
 move_timer = timer.timer_(DELAY)
@@ -18,10 +18,11 @@ class API:
     def __init__(self, window):
         self.window: webview.Window = window
         self.window.expose(self.onload_init, self.updateServer, self.addServer, self.editServer,
-                           self.refreshList, self.removeServer, self.moveUp, self.moveDown)
+                           self.refreshList, self.removeServer, self.moveUp, self.moveDown, self.save_setting)
 
     def onload_init(self):
         self.load_data()
+        self.load_setting()
 
     def load_data(self):
         combined_list = []
@@ -92,6 +93,16 @@ class API:
 
     def moveDown(self, id):
         storage.moveDown(id)
+
+    def load_setting(self):
+        a = config.get_config([
+            {"section": "localStorage", "option": "autoRefresh"},
+            {"section": "localStorage", "option": "refreshInterval"},
+        ])
+        self.window.evaluate_js(f"init_Settings({a['localStorage']})")
+
+    def save_setting(self, key, value):
+        config.write_config("localStorage", key, value)
 
     # window.events
     def on_moved(self, x, y):

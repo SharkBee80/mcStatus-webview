@@ -1,9 +1,8 @@
 onload = async () => {
     await new Promise(resolve => setTimeout(resolve, 200));
-    btn_ui();
-    loadSettings();
-    preload();
     pywebview.api.onload_init();
+    btn_ui();
+    preload();
 };
 
 /*
@@ -398,45 +397,50 @@ function btn_ui() {
 }
 
 // settings
-const STORAGE_KEYS = {
-    AUTOUPDATE: 'autoupdate',
-    INTERVAL: 'autoupdateInterval'
+let STORAGE_KEYS = {
+    "autoRefresh": "false",
+    'refreshInterval': "60",
 };
-const autoupdate = document.getElementById('autoUpdate');
-const autoupdateInterval = document.getElementById('autoUpdateInterval');
+
 let updateInterval;
+const autoRefresh = document.getElementById('autoRefresh');
+const refreshInterval = document.getElementById('refreshInterval');
+function init_Settings(storage) {
+    STORAGE_KEYS = storage;
+    const autoRefreshValue = STORAGE_KEYS.autoRefresh === 'true';
+    autoRefresh.checked = autoRefreshValue;
 
-const autoUpdateValue = localStorage.getItem(STORAGE_KEYS.AUTOUPDATE) === 'true';
-autoupdate.checked = autoUpdateValue;
-
-const intervalValue = localStorage.getItem(STORAGE_KEYS.INTERVAL) || '60';
-autoupdateInterval.value = intervalValue;
-
-function saveAndReload(key, value) {
-    localStorage.setItem(key, value);
+    const intervalValue = STORAGE_KEYS.refreshInterval || '60';
+    refreshInterval.value = intervalValue;
     loadSettings();
 }
-autoupdate.addEventListener('change', function () {
-    saveAndReload(STORAGE_KEYS.AUTOUPDATE, this.checked);
+function saveAndReload(key, value) {
+    STORAGE_KEYS.key = value;
+    loadSettings();
+    pywebview.api.save_setting(key, value);
+}
+
+autoRefresh.addEventListener('change', function () {
+    saveAndReload("autoRefresh", String(this.checked));
 });
 
-autoupdateInterval.addEventListener('change', function () {
+refreshInterval.addEventListener('change', function () {
     let value = parseInt(this.value, 10);
     if (isNaN(value) || value < 10) {
         value = 10;
     }
     this.value = value;
-    saveAndReload(STORAGE_KEYS.INTERVAL, value);
+    saveAndReload("refreshInterval", value);
 });
 
 function loadSettings() {
     if (updateInterval) clearInterval(updateInterval);
 
-    const autoUpdate = localStorage.getItem(STORAGE_KEYS.AUTOUPDATE) === 'true';
-    const intervalStr = localStorage.getItem(STORAGE_KEYS.INTERVAL) || '60';
+    const autoRefresh = STORAGE_KEYS.autoRefresh === 'true';
+    const intervalStr = STORAGE_KEYS.refreshInterval || '60';
     const interval = parseInt(intervalStr, 10);
 
-    if (autoUpdate && !isNaN(interval) && interval >= 10) {
+    if (autoRefresh && !isNaN(interval) && interval >= 10) {
         updateInterval = setInterval(async function () {
             const random = Math.floor(Math.random() * 10)
             await new Promise(resolve => setTimeout(resolve, random * 1000));
