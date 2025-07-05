@@ -213,6 +213,7 @@ body {
 .server-item-players,
 .server-item-ping {
     position: relative;
+    cursor: progress;
 }
 
 .server-item-players::before,
