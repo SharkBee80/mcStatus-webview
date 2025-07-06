@@ -31,3 +31,7 @@ pyinstaller --onefile --noconsole --add-data="src;src" --exclude-module=PyQt5 --
 ```shell
 pyi-archive_viewer dist/mcstatus.exe
 ```
+* 空提交
+```shell
+git commit --allow-empty -m "your message"
+```
